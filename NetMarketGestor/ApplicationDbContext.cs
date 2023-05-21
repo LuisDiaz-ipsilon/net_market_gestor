@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using NetMarketGestor.Models;
 
-namespace WebApiMotorcicles
+namespace NetMarketGestor
 {
     public class ApplicationDbContext : DbContext
     {
