@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System.ComponentModel.DataAnnotations;
-//using NetMarketGestor.Validaciones;
+using NetMarketGestor.Validaciones;
 
 namespace NetMarketGestor.Models
 {
@@ -15,7 +15,7 @@ namespace NetMarketGestor.Models
         public string DireccionEntrega { get; set; }
 
         [Required]
-        //[MetodoPago]
+        [MetodoPago]
         public string MetodoPago { get; set; }
 
         public string estatus { get; set; }
