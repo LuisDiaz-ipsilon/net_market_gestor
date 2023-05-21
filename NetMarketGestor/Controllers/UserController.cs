@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using NetMarketGestor.Models;
 
 using System.ComponentModel.DataAnnotations;
+using WebApiMotorcicles;
 
 namespace NetMarketGestor.Controllers
 {
@@ -15,9 +16,9 @@ namespace NetMarketGestor.Controllers
     public class UserController : ControllerBase
     {
         private readonly IMapper _mapper;
-        private readonly DbContext _dbContext;
+        private readonly ApplicationDbContext _dbContext;
 
-        public UserController(IMapper mapper, DbContext dbContext)
+        public UserController(IMapper mapper, ApplicationDbContext dbContext)
         {
             _mapper = mapper;
             _dbContext = dbContext;

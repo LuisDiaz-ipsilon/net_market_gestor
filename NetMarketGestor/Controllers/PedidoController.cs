@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using NetMarketGestor.Models;
 
 using System.ComponentModel.DataAnnotations;
+using WebApiMotorcicles;
 
 namespace NetMarketGestor.Controllers
 {
@@ -15,9 +16,9 @@ namespace NetMarketGestor.Controllers
     public class PedidoController : ControllerBase
     {
         private readonly IMapper _mapper;
-        private readonly DbContext _dbContext;
+        private readonly ApplicationDbContext _dbContext;
 
-        public PedidoController(IMapper mapper, DbContext dbContext)
+        public PedidoController(IMapper mapper, ApplicationDbContext dbContext)
         {
             _mapper = mapper;
             _dbContext = dbContext;

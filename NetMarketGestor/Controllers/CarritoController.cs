@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using NetMarketGestor.Models;
 
 using System.ComponentModel.DataAnnotations;
+using WebApiMotorcicles;
 
 namespace NetMarketGestor.Controllers
 {
@@ -16,9 +17,9 @@ namespace NetMarketGestor.Controllers
     {
         private readonly IMapper mapper;
         private readonly IConfiguration configuration;
-        private readonly DbContext dbContext;
+        private readonly ApplicationDbContext dbContext;
 
-        public CarritoController(IMapper mapper, DbContext dbContext)
+        public CarritoController(IMapper mapper, ApplicationDbContext dbContext)
         {
             this.mapper = mapper;
             this.dbContext = dbContext;

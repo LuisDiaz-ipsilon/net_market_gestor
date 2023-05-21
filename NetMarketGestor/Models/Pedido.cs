@@ -11,7 +11,7 @@ namespace NetMarketGestor.Models
 
         [Required(ErrorMessage = "El campo {0} es requerido")]
         [StringLength(maximumLength: 100, ErrorMessage = "El campo {0} solo puede tener hasta 150 caracteres")]
-        //[Direccion]
+        [Direccion]
         public string DireccionEntrega { get; set; }
 
         [Required]
