@@ -10,7 +10,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace NetMarketGestor.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/pedidos")]
     [ApiController]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class PedidoController : ControllerBase

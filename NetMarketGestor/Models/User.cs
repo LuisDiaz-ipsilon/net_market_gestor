@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-//using NetMarketGestor.Validaciones;
+using NetMarketGestor.Validaciones;
 
 namespace NetMarketGestor.Models
 {
@@ -11,9 +11,12 @@ namespace NetMarketGestor.Models
         [Required]
         public string Nombre { get; set; }
 
+        public string Email { get; set; }
+
         [Required]
         public Carrito Carrito { get; set; }
 
+        [Direccion]
         public String direccion { get; set; }
 
 

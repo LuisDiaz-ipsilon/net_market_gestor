@@ -4,13 +4,14 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NetMarketGestor.Models;
+using NetMarketGestor;
 
 using System.ComponentModel.DataAnnotations;
-using WebApiMotorcicles;
+
 
 namespace NetMarketGestor.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/carritos")]
     [ApiController]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class CarritoController : ControllerBase
