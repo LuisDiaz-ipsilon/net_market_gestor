@@ -16,6 +16,8 @@ namespace NetMarketGestor.Models
         [Required]
         public Carrito Carrito { get; set; }
 
+        public List<Pedido> Pedidos { get; set; }
+
         [Direccion]
         public String direccion { get; set; }
 

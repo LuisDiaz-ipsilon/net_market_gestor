@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using NetMarketGestor.Models;
 using NetMarketGestor.Validaciones;
 
 namespace NetMarketGestor.DTOs
@@ -14,6 +15,8 @@ namespace NetMarketGestor.DTOs
 
         [Required(ErrorMessage = "El campo Carrito es requerido.")]
         public CarritoDTO Carrito { get; set; }
+
+        public List<Pedido> Pedidos { get; set; }
 
         [Direccion]
         public string Direccion { get; set; }

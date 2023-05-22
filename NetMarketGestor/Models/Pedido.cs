@@ -18,11 +18,11 @@ namespace NetMarketGestor.Models
         [MetodoPago]
         public string MetodoPago { get; set; }
 
-        public string estatus { get; set; }
+        public string Estatus { get; set; }
 
-        public List<Product> productos { get; set; }
+        public List<Product> Productos { get; set; }
 
-        public User user { get; set; }
+        public User User { get; set; }
 
 
 
