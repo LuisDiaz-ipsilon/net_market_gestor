@@ -2,6 +2,8 @@
 using NetMarketGestor.DTOs;
 using NetMarketGestor.Models;
 using System.Net.NetworkInformation;
+using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace NetMarketGestor.Utilidades
 {
@@ -41,16 +43,12 @@ namespace NetMarketGestor.Utilidades
 
             /*//Tipos de CreateMap que hacen falta 
              * CreateMap<ClaseCreacionDTO, Clase>()
-                .ForMember(clase => clase.AlumnoClase, opciones => opciones.MapFrom(MapAlumnoClase));
-
-            CreateMap<Clase, ClaseDTOConAlumnos>()
-                .ForMember(claseDTO => claseDTO.Alumnos, opciones => opciones.MapFrom(MapClaseDTOAlumnos));
-            CreateMap<ClasePatchDTO, Clase>().ReverseMap();*/
+                .ForMember(clase => clase.AlumnoClase, opciones => opciones.MapFrom(MapAlumnoClase));*/
 
 
         }
 
-        private List<PedidoDTO> MapUserDTOConPedidos(User user, GetUserDTO getUserDTO)
+        private async Task<List<PedidoDTO>> MapUserDTOConPedidos(User user, GetUserDTO getUserDTO)
         {
             var result = new List<PedidoDTO>();
 
@@ -70,7 +68,7 @@ namespace NetMarketGestor.Utilidades
             return result;
 
         }
-        private CarritoDTO MapUserDTOConCarrito(User user, UserDTOConCarrito userDTO)
+        private async Task<CarritoDTO>  MapUserDTOConCarrito(User user, UserDTOConCarrito userDTO)
         {
             var result =  new CarritoDTO();
 

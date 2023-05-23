@@ -27,17 +27,17 @@ namespace NetMarketGestor.Controllers
         // GET: api/User
         [HttpGet]
         [AllowAnonymous]
-        public IActionResult Get()
+        public async Task<IActionResult> Get()
         {
-            var users = _dbContext.Set<User>();
+            var users = await _dbContext.Set<User>().ToListAsync();
             return Ok(users);
         }
 
         // GET: api/User/5
         [HttpGet("{id}")]
-        public IActionResult Get(int id)
+        public async Task<IActionResult> Get(int id)
         {
-            var user = _dbContext.Set<User>().Find(id);
+            var user = await _dbContext.Set<User>().FindAsync(id);
             if (user == null)
             {
                 return NotFound();
@@ -47,7 +47,7 @@ namespace NetMarketGestor.Controllers
 
         // POST: api/User
         [HttpPost]
-        public IActionResult Post([FromBody] User user)
+        public async Task<IActionResult> Post([FromBody] User user)
         {
             if (!ModelState.IsValid)
             {
@@ -55,14 +55,14 @@ namespace NetMarketGestor.Controllers
             }
 
             _dbContext.Set<User>().Add(user);
-            _dbContext.SaveChanges();
+            await _dbContext.SaveChangesAsync();
 
             return CreatedAtAction(nameof(Get), new { id = user.Id }, user);
         }
 
         // PUT: api/User/5
         [HttpPut("{id}")]
-        public IActionResult Put(int id, [FromBody] User user)
+        public async Task<IActionResult> Put(int id, [FromBody] User user)
         {
             if (id != user.Id)
             {
@@ -70,23 +70,23 @@ namespace NetMarketGestor.Controllers
             }
 
             _dbContext.Entry(user).State = EntityState.Modified;
-            _dbContext.SaveChanges();
+            await _dbContext.SaveChangesAsync();
 
             return NoContent();
         }
 
         // DELETE: api/User/5
         [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            var user = _dbContext.Set<User>().Find(id);
+            var user = await _dbContext.Set<User>().FindAsync(id);
             if (user == null)
             {
                 return NotFound();
             }
 
             _dbContext.Set<User>().Remove(user);
-            _dbContext.SaveChanges();
+            await _dbContext.SaveChangesAsync();
 
             return NoContent();
         }
