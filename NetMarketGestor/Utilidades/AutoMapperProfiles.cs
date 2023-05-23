@@ -32,8 +32,11 @@ namespace NetMarketGestor.Utilidades
                 .ForMember(PedidoDTO => PedidoDTO.Productos, opciones => opciones.MapFrom(MapPedidoDTOConProductos));
             CreateMap <Pedido, PedidoDTOConUsers> ()
                 .ForMember(PedidoDTO => PedidoDTO.User, opciones => opciones.MapFrom(MapPedidoDTOConUsers));
-            /*CreateMap <Product, ProductoDTOConPedido> () //No existe relacion desde producto a pedido relevante
-                .ForMember(ProductDTO => ProductDTO., opciones => opciones.MapFrom(MapProductoDTOConPedido));*/ 
+
+            CreateMap<CarritoPatchDTO, Carrito>().ReverseMap();
+            CreateMap<PedidoPatchDTO, Pedido>().ReverseMap();
+            CreateMap<ProductPatchDTO, Product>().ReverseMap();
+            CreateMap<UserPatchDTO, User>().ReverseMap();
 
 
             /*//Tipos de CreateMap que hacen falta 

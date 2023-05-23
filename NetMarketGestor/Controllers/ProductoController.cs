@@ -56,14 +56,14 @@ namespace NetMarketGestor.Controllers
             _dbContext.Set<Product>().Add(product);
             _dbContext.SaveChanges();
 
-            return CreatedAtAction(nameof(Get), new { id = product.id }, product);
+            return CreatedAtAction(nameof(Get), new { id = product.Id }, product);
         }
 
         // PUT: api/Product/5
         [HttpPut("{id}")]
         public IActionResult Put(int id, [FromBody] Product product)
         {
-            if (id != product.id)
+            if (id != product.Id)
             {
                 return BadRequest();
             }

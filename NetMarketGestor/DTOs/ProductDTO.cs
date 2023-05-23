@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using NetMarketGestor.Models;
+using System.ComponentModel.DataAnnotations;
 
 
 namespace NetMarketGestor.DTOs
@@ -11,6 +12,10 @@ namespace NetMarketGestor.DTOs
 
         [Required(ErrorMessage = "El campo Categoria es requerido.")]
         public string Categoria { get; set; }
+
+        public Product Product { get; set; }
+
+        public int Existencia { get; set; }
 
         public double Precio { get; set; }
 

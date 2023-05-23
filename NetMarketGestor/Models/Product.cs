@@ -12,7 +12,9 @@ namespace NetMarketGestor.Models
 
         public string Nombre { get; set; }
 
-  [Required]
+        public int Existencia { get; set; }
+
+        [Required]
         //[Categoria]
         public string Categoria { get; set; }
 
