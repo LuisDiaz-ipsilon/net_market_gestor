@@ -8,9 +8,11 @@ namespace NetMarketGestor.Models
 {
     public class Product
     {
-        public int id { get; set; }
+        public int Id { get; set; }
 
-        [Required]
+        public string Nombre { get; set; }
+
+  [Required]
         //[Categoria]
         public string Categoria { get; set; }
 
