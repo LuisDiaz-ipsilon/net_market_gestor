@@ -26,17 +26,17 @@ namespace NetMarketGestor.Controllers
 
         // GET: api/Product
         [HttpGet]
-        public IActionResult Get()
+        public async Task<IActionResult> Get()
         {
-            var products = _dbContext.Set<Product>();
+            var products = await _dbContext.Set<Product>().ToListAsync();
             return Ok(products);
         }
 
         // GET: api/Product/5
         [HttpGet("{id}")]
-        public IActionResult Get(int id)
+        public async Task<IActionResult> Get(int id)
         {
-            var product = _dbContext.Set<Product>().Find(id);
+            var product = await _dbContext.Set<Product>().FindAsync(id);
             if (product == null)
             {
                 return NotFound();
@@ -46,7 +46,7 @@ namespace NetMarketGestor.Controllers
 
         // POST: api/Product
         [HttpPost]
-        public IActionResult Post([FromBody] Product product)
+        public async Task<IActionResult> Post([FromBody] Product product)
         {
             if (!ModelState.IsValid)
             {
@@ -54,14 +54,14 @@ namespace NetMarketGestor.Controllers
             }
 
             _dbContext.Set<Product>().Add(product);
-            _dbContext.SaveChanges();
+            await _dbContext.SaveChangesAsync();
 
             return CreatedAtAction(nameof(Get), new { id = product.Id }, product);
         }
 
         // PUT: api/Product/5
         [HttpPut("{id}")]
-        public IActionResult Put(int id, [FromBody] Product product)
+        public async Task<IActionResult> Put(int id, [FromBody] Product product)
         {
             if (id != product.Id)
             {
@@ -69,23 +69,23 @@ namespace NetMarketGestor.Controllers
             }
 
             _dbContext.Entry(product).State = EntityState.Modified;
-            _dbContext.SaveChanges();
+            await _dbContext.SaveChangesAsync();
 
             return NoContent();
         }
 
         // DELETE: api/Product/5
         [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            var product = _dbContext.Set<Product>().Find(id);
+            var product = await _dbContext.Set<Product>().FindAsync(id);
             if (product == null)
             {
                 return NotFound();
             }
 
             _dbContext.Set<Product>().Remove(product);
-            _dbContext.SaveChanges();
+            await _dbContext.SaveChangesAsync();
 
             return NoContent();
         }

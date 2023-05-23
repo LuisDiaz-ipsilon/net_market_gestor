@@ -28,17 +28,17 @@ namespace NetMarketGestor.Controllers
 
         // GET: api/Carrito
         [HttpGet]
-        public IActionResult Get()
+        public async Task<IActionResult> Get()
         {
-            var carritos = dbContext.Set<Carrito>();
+            var carritos = await dbContext.Set<Carrito>().ToListAsync();
             return Ok(carritos);
         }
 
         // GET: api/Carrito/5
         [HttpGet("{id}")]
-        public IActionResult Get(int id)
+        public async Task<IActionResult> Get(int id)
         {
-            var carrito = dbContext.Set<Carrito>().Find(id);
+            var carrito = await dbContext.Set<Carrito>().FindAsync(id);
             if (carrito == null)
             {
                 return NotFound();
@@ -48,7 +48,7 @@ namespace NetMarketGestor.Controllers
 
         // POST: api/Carrito
         [HttpPost]
-        public IActionResult Post([FromBody] Carrito carrito)
+        public async Task<IActionResult> Post([FromBody] Carrito carrito)
         {
             if (!ModelState.IsValid)
             {
@@ -56,14 +56,14 @@ namespace NetMarketGestor.Controllers
             }
 
             dbContext.Set<Carrito>().Add(carrito);
-            dbContext.SaveChanges();
+            await dbContext.SaveChangesAsync();
 
             return CreatedAtAction(nameof(Get), new { id = carrito.id }, carrito);
         }
 
         // PUT: api/Carrito/5
         [HttpPut("{id}")]
-        public IActionResult Put(int id, [FromBody] Carrito carrito)
+        public async Task<IActionResult> Put(int id, [FromBody] Carrito carrito)
         {
             if (id != carrito.id)
             {
@@ -71,23 +71,23 @@ namespace NetMarketGestor.Controllers
             }
 
             dbContext.Entry(carrito).State = EntityState.Modified;
-            dbContext.SaveChanges();
+            await dbContext.SaveChangesAsync();
 
             return NoContent();
         }
 
         // DELETE: api/Carrito/5
         [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            var carrito = dbContext.Set<Carrito>().Find(id);
+            var carrito = await dbContext.Set<Carrito>().FindAsync(id);
             if (carrito == null)
             {
                 return NotFound();
             }
 
             dbContext.Set<Carrito>().Remove(carrito);
-            dbContext.SaveChanges();
+            await dbContext.SaveChangesAsync();
 
             return NoContent();
         }
