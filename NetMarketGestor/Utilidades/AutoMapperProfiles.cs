@@ -40,11 +40,20 @@ namespace NetMarketGestor.Utilidades
             CreateMap<ProductPatchDTO, Product>().ReverseMap();
             CreateMap<UserPatchDTO, User>().ReverseMap();
 
+            //No es necesario un Map de CarritoCreacion ya que este se crea al crear el usuario.
+            /*CreateMap<CarritoCreacionDTO, Carrito>()
+                .ForMember(carrito => carrito.user, opciones => opciones.MapFrom(MapUserCarrito));*/
 
-            /*//Tipos de CreateMap que hacen falta 
-             * CreateMap<ClaseCreacionDTO, Clase>()
-                .ForMember(clase => clase.AlumnoClase, opciones => opciones.MapFrom(MapAlumnoClase));*/
+            //PedidoCreacionDTO
+            CreateMap<PedidoCreacionDTO, Pedido>()
+                .ForMember(Pedido => Pedido.Productos, opciones => opciones.MapFrom<List<Product>>(MapCarritoPedido))
+                .ForMember(Pedido => Pedido.User, opciones => opciones.MapFrom<User>(MapPedidoUser));
 
+            CreateMap<ProductCreacionDTO, Product>();
+
+            //Para crear un usuario es obligatorio crearle un Carrito vacio.
+            CreateMap<UserCreacionDTO, User>()
+                .ForMember(User => User.Carrito, opciones => opciones.MapFrom<Carrito>(MapCarritoUser));
 
         }
 
@@ -154,8 +163,73 @@ namespace NetMarketGestor.Utilidades
         }
 
 
+        private User MapUserCarrito(CarritoCreacionDTO carritoCreacionDTO, User user)
+        {
+            var resultado = new User();
 
+            if(carritoCreacionDTO.user == null)
+            {
+                return resultado;
+            }
 
+            if(carritoCreacionDTO.user.Id == user.Id)
+            {
+                resultado = user;
+            }
+
+            return resultado;
+        }
+
+        private List<Product> MapCarritoPedido(PedidoCreacionDTO pedidoCreacionDTO, Carrito carrito)
+        {
+            List<Product> resultado = new List<Product>();
+
+            if(pedidoCreacionDTO.Productos.Count == 0)
+            {
+                return resultado;
+            }
+
+            if(pedidoCreacionDTO.User.Id == carrito.user.Id)
+            {
+                resultado.AddRange(carrito.productos);
+            }
+
+            return resultado;
+        }
+
+        private User MapPedidoUser(PedidoCreacionDTO pedidoCreacionDTO, User user)
+        {
+            User resultado = new User();
+
+            if(pedidoCreacionDTO.User is null)
+            {
+                return resultado;
+            }
+
+            if(pedidoCreacionDTO.User.Id == pedidoCreacionDTO.User.Id)
+            {
+                resultado = user;
+            }
+
+            return resultado;
+        }
+
+        private Carrito MapCarritoUser(UserCreacionDTO userCreacionDTO, Carrito carrito)
+        {
+            var resultado = new Carrito();
+
+            if (userCreacionDTO.Carrito is null)
+            {
+                return resultado;
+            }
+
+            if (userCreacionDTO.Carrito.user.Id == carrito.user.Id)
+            {
+                resultado = carrito;
+            }
+
+            return resultado;
+        }
 
     }
 }
