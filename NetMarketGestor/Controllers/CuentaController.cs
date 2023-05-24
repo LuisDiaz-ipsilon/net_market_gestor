@@ -9,7 +9,7 @@ using System.Security.Claims;
 using System.Text;
 using NetMarketGestor.DTOs;
 
-namespace WebApiAlumnosSeg.Controllers
+namespace NetMarketGestor.Controllers
 {
     [ApiController]
     [Route("cuentas")]

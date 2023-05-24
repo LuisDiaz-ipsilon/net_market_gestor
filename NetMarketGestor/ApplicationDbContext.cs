@@ -18,13 +18,12 @@ namespace NetMarketGestor
             modelBuilder.Entity<User>()
                 .HasKey(al => new { al.Email, al.Nombre });
         }
-
-        public DbSet<User> Users { get; set; }
-
         public DbSet<Carrito> Carritos { get; set; }
 
         public DbSet<Pedido> Pedidos { get; set; }
 
         public DbSet<Product> Products { get; set; }
+
+        public DbSet<User> Users { get; set; }
     }
 }

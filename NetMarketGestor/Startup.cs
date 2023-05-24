@@ -58,7 +58,7 @@ namespace NetMarketGestor
 
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "NetMarketGestor", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "NetMarketGestor", Version = "v1" });
 
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
@@ -80,7 +80,7 @@ namespace NetMarketGestor
                                 Id = "Bearer"
                             }
                         },
-                         new string[]{}
+                         new String[]{}
                     }
                 });
 
