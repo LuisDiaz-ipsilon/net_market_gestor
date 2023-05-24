@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using NetMarketGestor.DTOs;
 using NetMarketGestor.Models;
 
 using System.ComponentModel.DataAnnotations;
@@ -17,24 +18,26 @@ namespace NetMarketGestor.Controllers
     {
         private readonly IMapper _mapper;
         private readonly ApplicationDbContext _dbContext;
+        private readonly IConfiguration configuration;
 
-        public PedidoController(IMapper mapper, ApplicationDbContext dbContext)
+        public PedidoController(IMapper mapper, ApplicationDbContext dbContext, IConfiguration configuration)
         {
             _mapper = mapper;
             _dbContext = dbContext;
+            this.configuration = configuration;
         }
 
         // GET: api/Pedido
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<ActionResult<List<GetPedidoDTO>>> Get()
         {
-            var pedidos = await _dbContext.Set<Pedido>().ToListAsync();
+            var pedidos = await _dbContext.Pedidos.ToListAsync();
             return Ok(pedidos);
         }
 
         // GET: api/Pedido/5
-        [HttpGet("{id}")]
-        public async Task<IActionResult> Get(int id)
+        [HttpGet("{id:int}", Name = "obtenerpedido")]
+        public async Task<ActionResult> Get(int id)
         {
             var pedido = await _dbContext.Set<Pedido>().FindAsync(id);
             if (pedido == null)
@@ -46,48 +49,65 @@ namespace NetMarketGestor.Controllers
 
         // POST: api/Pedido
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] Pedido pedido)
+        public async Task<ActionResult> Post([FromBody] PedidoDTO pedidoDTO)
         {
+            var existePedido = await _dbContext.Pedidos.AnyAsync(x => x.id == pedidoDTO.Id);
+
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                return BadRequest("Ya existe este carrito");
             }
 
-            _dbContext.Set<Pedido>().Add(pedido);
+            var pedido = _mapper.Map<Pedido>(pedidoDTO);
+
+            _dbContext.Add(pedido);
             await _dbContext.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(Get), new { id = pedido.id }, pedido);
+            var pedidoDto = _mapper.Map<GetPedidoDTO>(pedido);
+
+            return CreatedAtRoute("obtenerpedido", new {id = pedido.id}, pedidoDto);
         }
 
         // PUT: api/Pedido/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, [FromBody] Pedido pedido)
+        [HttpPut("{id:int}")]
+        public async Task<ActionResult> Put(PedidoCreacionDTO pedidoCreacionDTO, int id)
         {
-            if (id != pedido.id)
+            var exist = await _dbContext.Pedidos.AnyAsync(x => x.id == id);
+            
+            if (!exist)
             {
-                return BadRequest();
+                return NotFound();
             }
 
-            _dbContext.Entry(pedido).State = EntityState.Modified;
+            var pedido = _mapper.Map<Pedido>(pedidoCreacionDTO);
+            pedido.id = id;
+
+            _dbContext.Update(pedido);
             await _dbContext.SaveChangesAsync();
 
             return NoContent();
         }
 
         // DELETE: api/Pedido/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        [HttpDelete("{id:int}")]
+        public async Task<ActionResult> Delete(int id)
         {
-            var pedido = await _dbContext.Set<Pedido>().FindAsync(id);
-            if (pedido == null)
+
+            var exist = await _dbContext.Pedidos.AnyAsync(x => x.id == id);
+
+            if (!exist)
             {
-                return NotFound();
+                return NotFound("No se encontro el pedido a eliminar");
             }
 
-            _dbContext.Set<Pedido>().Remove(pedido);
+            _dbContext.Remove(
+                new Pedido()
+                {
+                    id = id
+                });
             await _dbContext.SaveChangesAsync();
 
-            return NoContent();
+            return Ok();
         }
     }
 }

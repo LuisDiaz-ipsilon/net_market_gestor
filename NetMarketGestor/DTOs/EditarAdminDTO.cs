@@ -5,6 +5,7 @@ namespace NetMarketGestor.DTOs
     public class EditarAdminDTO
     {
         [Required]
-        public string Nombre { get; set; }
+        [EmailAddress]
+        public string Email { get; set; }
     }
 }

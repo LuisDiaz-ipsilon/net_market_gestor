@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using NetMarketGestor.DTOs;
 using NetMarketGestor.Models;
 
 using System.ComponentModel.DataAnnotations;
@@ -17,24 +18,27 @@ namespace NetMarketGestor.Controllers
     {
         private readonly IMapper _mapper;
         private readonly ApplicationDbContext _dbContext;
+        private readonly IConfiguration configuration;
 
-        public ProductController(IMapper mapper, ApplicationDbContext dbContext)
+        public ProductController(IMapper mapper, ApplicationDbContext dbContext, IConfiguration configuration)
         {
             _mapper = mapper;
             _dbContext = dbContext;
+            this.configuration = configuration;
         }
 
         // GET: api/Product
         [HttpGet]
-        public async Task<IActionResult> Get()
+        [AllowAnonymous]
+        public async Task<ActionResult<List<GetProductDTO>>> Get()
         {
-            var products = await _dbContext.Set<Product>().ToListAsync();
-            return Ok(products);
+            var products = await _dbContext.Products.ToListAsync();
+            return _mapper.Map<List<GetProductDTO>>(products);
         }
 
         // GET: api/Product/5
-        [HttpGet("{id}")]
-        public async Task<IActionResult> Get(int id)
+        [HttpGet("{id}:int", Name = "obtenerproduct")]
+        public async Task<ActionResult> Get(int id)
         {
             var product = await _dbContext.Set<Product>().FindAsync(id);
             if (product == null)
@@ -44,50 +48,74 @@ namespace NetMarketGestor.Controllers
             return Ok(product);
         }
 
+        //Get by name Product
+        [HttpGet("{nombre}")]
+        public async Task<ActionResult<List<GetProductDTO>>> Get([FromRoute] string nombre)
+        {
+            var products = await _dbContext.Products.Where(productsDB => productsDB.Nombre.Contains(nombre)).ToListAsync();
+            
+            return _mapper.Map<List<GetProductDTO>>(products);
+        }
+
         // POST: api/Product
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] Product product)
+        public async Task<ActionResult> Post([FromBody] ProductDTO productDTO)
         {
-            if (!ModelState.IsValid)
+
+            var existeProductoMismoNombre = await _dbContext.Products.AnyAsync(x => x.Nombre == productDTO.Nombre);
+
+            if (existeProductoMismoNombre)
             {
-                return BadRequest(ModelState);
+                return BadRequest("Ya existe el producto con el mismo nombre");
             }
 
-            _dbContext.Set<Product>().Add(product);
+            var product = _mapper.Map<Product>(productDTO);
+
+            _dbContext.Add(product);
             await _dbContext.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(Get), new { id = product.Id }, product);
+            var productDto = _mapper.Map<GetProductDTO>(product);
+
+            return CreatedAtRoute("obtenerproduct", new {id = product.Id}, productDto);
         }
 
         // PUT: api/Product/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, [FromBody] Product product)
+        [HttpPut("{id:int}")]
+        public async Task<ActionResult> Put(ProductCreacionDTO productCreacionDTO, int id)
         {
-            if (id != product.Id)
+
+            var exist = await _dbContext.Products.AnyAsync(x => x.Id == id);
+            if (!exist)
             {
-                return BadRequest();
+                return NotFound();
             }
 
-            _dbContext.Entry(product).State = EntityState.Modified;
+            var product = _mapper.Map<Product>(productCreacionDTO);
+            product.Id = id;
+
+            _dbContext.Update(product);
             await _dbContext.SaveChangesAsync();
 
             return NoContent();
         }
 
         // DELETE: api/Product/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        [HttpDelete("{id:int}")]
+        public async Task<ActionResult> Delete(int id)
         {
-            var product = await _dbContext.Set<Product>().FindAsync(id);
-            if (product == null)
+            var product = await _dbContext.Products.AnyAsync(x => x.Id == id);
+            if (!product)
             {
-                return NotFound();
+                return NotFound("No se encuentra el producto a eliminar");
             }
 
-            _dbContext.Set<Product>().Remove(product);
+            _dbContext.Remove(new Product()
+            {
+                Id = id
+            });
             await _dbContext.SaveChangesAsync();
 
-            return NoContent();
+            return Ok();
         }
     }
 }

@@ -61,3 +61,8 @@ C:\Users\Win\Documents\FCFM\05 BackEnd\net_market_gestor\NetMarketGestor\obj\Deb
 C:\Users\Win\Documents\FCFM\05 BackEnd\net_market_gestor\NetMarketGestor\obj\Debug\net6.0\NetMarketGestor.pdb
 C:\Users\Win\Documents\FCFM\05 BackEnd\net_market_gestor\NetMarketGestor\obj\Debug\net6.0\NetMarketGestor.genruntimeconfig.cache
 C:\Users\Win\Documents\FCFM\05 BackEnd\net_market_gestor\NetMarketGestor\obj\Debug\net6.0\ref\NetMarketGestor.dll
+C:\Users\Win\Documents\FCFM\05 BackEnd\net_market_gestor\NetMarketGestor\bin\Debug\net6.0\Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll
+C:\Users\Win\Documents\FCFM\05 BackEnd\net_market_gestor\NetMarketGestor\bin\Debug\net6.0\Microsoft.AspNetCore.JsonPatch.dll
+C:\Users\Win\Documents\FCFM\05 BackEnd\net_market_gestor\NetMarketGestor\bin\Debug\net6.0\Microsoft.AspNetCore.Mvc.NewtonsoftJson.dll
+C:\Users\Win\Documents\FCFM\05 BackEnd\net_market_gestor\NetMarketGestor\bin\Debug\net6.0\Newtonsoft.Json.dll
+C:\Users\Win\Documents\FCFM\05 BackEnd\net_market_gestor\NetMarketGestor\bin\Debug\net6.0\Newtonsoft.Json.Bson.dll

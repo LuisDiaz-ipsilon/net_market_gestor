@@ -45,15 +45,15 @@ namespace NetMarketGestor.Utilidades
                 .ForMember(carrito => carrito.user, opciones => opciones.MapFrom(MapUserCarrito));*/
 
             //PedidoCreacionDTO
-            CreateMap<PedidoCreacionDTO, Pedido>()
-                .ForMember(Pedido => Pedido.Productos, opciones => opciones.MapFrom<List<Product>>(MapCarritoPedido))
-                .ForMember(Pedido => Pedido.User, opciones => opciones.MapFrom<User>(MapPedidoUser));
+            CreateMap<PedidoCreacionDTO, Pedido>();
+                //.ForMember(Pedido => Pedido.Productos, opciones => opciones.MapFrom<List<Product>>(MapCarritoPedido))
+                //.ForMember(Pedido => Pedido.User, opciones => opciones.MapFrom<User>(MapPedidoUser));
 
             CreateMap<ProductCreacionDTO, Product>();
 
             //Para crear un usuario es obligatorio crearle un Carrito vacio.
-            CreateMap<UserCreacionDTO, User>()
-                .ForMember(User => User.Carrito, opciones => opciones.MapFrom<Carrito>(MapCarritoUser));
+            CreateMap<UserCreacionDTO, User>();
+                //.ForMember(User => User.Carrito, opciones => opciones.MapFrom<Carrito>(MapCarritoUser));
 
         }
 
