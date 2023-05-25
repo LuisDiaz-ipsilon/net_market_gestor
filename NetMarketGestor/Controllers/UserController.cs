@@ -44,7 +44,10 @@ namespace NetMarketGestor.Controllers
         [HttpGet("{id:int}", Name = "obteneruser")]
         public async Task<ActionResult> Get(int id)
         {
-            var user = await _dbContext.Set<User>().FindAsync(id);
+            var user = await _dbContext.Set<User>()
+                .Include(u => u.Carrito)
+                .ThenInclude(c => c.productos)
+                .FirstOrDefaultAsync(u => u.Id == id);
             if (user == null)
             {
                 return NotFound();
