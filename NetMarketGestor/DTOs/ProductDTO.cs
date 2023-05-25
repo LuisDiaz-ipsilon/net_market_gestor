@@ -13,7 +13,6 @@ namespace NetMarketGestor.DTOs
         [Required(ErrorMessage = "El campo Categoria es requerido.")]
         public string Categoria { get; set; }
 
-        public Product Product { get; set; }
 
         public int Existencia { get; set; }
 
