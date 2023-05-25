@@ -131,7 +131,11 @@ namespace NetMarketGestor.Controllers
 
         // POST: cuentas/logout
         [HttpPost("logout")]
+<<<<<<< Updated upstream
         [EnableCors("CorsForNinja")]
+=======
+        [AllowAnonymous]
+>>>>>>> Stashed changes
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult> Logout()
         {

@@ -14,7 +14,7 @@ namespace NetMarketGestor.Controllers
 {
     [Route("api/productos")]
     [ApiController]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "EsAdmin")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class ProductController : ControllerBase
     {
         private readonly IMapper _mapper;
@@ -60,6 +60,7 @@ namespace NetMarketGestor.Controllers
 
         // POST: api/Product
         [HttpPost]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "EsAdmin")]
         public async Task<ActionResult> Post([FromBody] ProductDTO productDTO)
         {
 
