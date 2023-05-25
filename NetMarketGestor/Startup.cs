@@ -107,6 +107,10 @@ namespace NetMarketGestor
                     //builder.WithOrigins("https://google.com").AllowAnyMethod().AllowAnyHeader();
                     //
                 });
+                opciones.AddPolicy(name: "CorsForNinja", policy =>
+                {
+                    policy.WithOrigins("https://restninja.io/").WithMethods("GET", "POST");
+                });
             });
 
         }

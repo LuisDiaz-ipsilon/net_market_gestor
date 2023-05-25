@@ -8,6 +8,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using NetMarketGestor.DTOs;
+using Microsoft.AspNetCore.Cors;
 
 namespace NetMarketGestor.Controllers
 {
@@ -45,6 +46,7 @@ namespace NetMarketGestor.Controllers
         }
 
         [HttpPost("login")]
+        [EnableCors("CorsForNinja")]
         public async Task<ActionResult<ResponseAuthentication>> Login(CredencialesUsuario credencialesUsuario)
         {
             var result = await signInManager.PasswordSignInAsync(credencialesUsuario.Email,
@@ -63,6 +65,7 @@ namespace NetMarketGestor.Controllers
 
         [HttpGet("RenovarToken")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [EnableCors("CorsForNinja")]
         public async Task<ActionResult<ResponseAuthentication>> Renovar()
         {
             var emailClaim = HttpContext.User.Claims.Where(claim => claim.Type == "email").FirstOrDefault();
@@ -128,6 +131,7 @@ namespace NetMarketGestor.Controllers
 
         // POST: cuentas/logout
         [HttpPost("logout")]
+        [EnableCors("CorsForNinja")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult> Logout()
         {

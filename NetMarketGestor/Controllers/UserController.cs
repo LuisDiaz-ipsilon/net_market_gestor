@@ -10,6 +10,7 @@ using NetMarketGestor;
 using NetMarketGestor.DTOs;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Cors;
 
 namespace NetMarketGestor.Controllers
 {
@@ -34,6 +35,7 @@ namespace NetMarketGestor.Controllers
         // GET: api/User
         [HttpGet]
         [AllowAnonymous]
+        [EnableCors("CorsForNinja")]
         public async Task<ActionResult<List<GetUserDTO>>> Get()
         {
             var users = await _dbContext.Users.ToListAsync();
@@ -42,6 +44,7 @@ namespace NetMarketGestor.Controllers
 
         // GET: api/User/5
         [HttpGet("{id:int}", Name = "obteneruser")]
+        [EnableCors("CorsForNinja")]
         public async Task<ActionResult> Get(int id)
         {
             var user = await _dbContext.Set<User>()
@@ -57,6 +60,7 @@ namespace NetMarketGestor.Controllers
 
         [HttpGet("{nombre}")]
         [AllowAnonymous]
+        [EnableCors("CorsForNinja")]
         public async Task<ActionResult<List<GetUserDTO>>> Get([FromRoute] string nombre)
         {
             var users = await _dbContext.Users.Where(userDB => userDB.Nombre.Contains(nombre)).ToListAsync();
