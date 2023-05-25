@@ -10,6 +10,7 @@ using System.IdentityModel.Tokens.Jwt;
 using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using NetMarketGestor.Services;
 
 namespace NetMarketGestor
 {
@@ -53,6 +54,7 @@ namespace NetMarketGestor
                     ClockSkew = TimeSpan.Zero
 
                 });
+            services.AddHostedService<TimerService>();
 
             services.AddEndpointsApiExplorer();
 
