@@ -16,7 +16,11 @@ namespace NetMarketGestor
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<User>()
-                .HasKey(al => new { al.Email, al.Nombre });
+                //.HasKey(al => new { al.Id })
+                .HasOne(u => u.Carrito)
+                .WithOne(c => c.user)
+                .HasForeignKey<Carrito>(c => c.UserId);
+
         }
         public DbSet<Carrito> Carritos { get; set; }
 

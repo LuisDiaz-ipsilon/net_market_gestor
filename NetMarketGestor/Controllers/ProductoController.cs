@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NetMarketGestor.DTOs;
@@ -98,6 +99,33 @@ namespace NetMarketGestor.Controllers
 
             return NoContent();
         }
+
+        // PATCH: api/Product/5
+        [HttpPatch("{id:int}")]
+        public async Task<ActionResult> Patch(int id, [FromBody] JsonPatchDocument<ProductDTO> patchDocument)
+        {
+            var product = await _dbContext.Products.FindAsync(id);
+            if (product == null)
+            {
+                return NotFound();
+            }
+
+            var productDTO = _mapper.Map<ProductDTO>(product);
+
+            patchDocument.ApplyTo(productDTO, ModelState);
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            _mapper.Map(productDTO, product);
+
+            await _dbContext.SaveChangesAsync();
+
+            return NoContent();
+        }
+
 
         // DELETE: api/Product/5
         [HttpDelete("{id:int}")]

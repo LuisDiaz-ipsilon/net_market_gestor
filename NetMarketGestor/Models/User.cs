@@ -4,7 +4,7 @@ using NetMarketGestor.Validaciones;
 
 namespace NetMarketGestor.Models
 {
-    public class User : IdentityUser
+    public class User
     {
 
         public int Id { get; set; }
@@ -14,13 +14,13 @@ namespace NetMarketGestor.Models
 
         public string Email { get; set; }
 
-        [Required]
+       
         public Carrito Carrito { get; set; }
 
         public List<Pedido> Pedidos { get; set; }
 
         [Direccion]
-        public String direccion { get; set; }
+        public string direccion { get; set; }
 
 
 

@@ -79,14 +79,11 @@ namespace NetMarketGestor.Controllers
 
         private async Task<ResponseAuthentication> ConstruirToken(CredencialesUsuario credencialesUsuario)
         {
-            //Informacion del usuario en la cual podemos confiar
-            //En los claim se pueden declarar cualquier variable, sin embargo, no debemos de declarar informacion
-            //del cliente sensible como pudiera ser una Tarjeta de Credito o contraseña
-
+            
             var claims = new List<Claim>
             {
                 new Claim("email", credencialesUsuario.Email),
-                new Claim("claimtest", "Claim prueba ")
+                new Claim("claimSEC", "8761260NSDUND")
             };
 
             var usuario = await userManager.FindByEmailAsync(credencialesUsuario.Email);

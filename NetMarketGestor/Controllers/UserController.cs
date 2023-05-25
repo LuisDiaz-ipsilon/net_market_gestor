@@ -9,6 +9,7 @@ using System.ComponentModel.DataAnnotations;
 using NetMarketGestor;
 using NetMarketGestor.DTOs;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Identity;
 
 namespace NetMarketGestor.Controllers
 {
@@ -20,12 +21,14 @@ namespace NetMarketGestor.Controllers
         private readonly IMapper _mapper;
         private readonly ApplicationDbContext _dbContext;
         private readonly IConfiguration configuration;
+        private readonly UserManager<IdentityUser> userManager;
 
-        public UserController(IMapper mapper, ApplicationDbContext dbContext, IConfiguration configuration)
+        public UserController(IMapper mapper, ApplicationDbContext dbContext, IConfiguration configuration, UserManager<IdentityUser> userManager)
         {
             _mapper = mapper;
             _dbContext = dbContext;
             this.configuration = configuration;
+            this.userManager = userManager;
         }
 
         // GET: api/User
@@ -50,6 +53,7 @@ namespace NetMarketGestor.Controllers
         }
 
         [HttpGet("{nombre}")]
+        [AllowAnonymous]
         public async Task<ActionResult<List<GetUserDTO>>> Get([FromRoute] string nombre)
         {
             var users = await _dbContext.Users.Where(userDB => userDB.Nombre.Contains(nombre)).ToListAsync();
@@ -59,13 +63,20 @@ namespace NetMarketGestor.Controllers
 
         // POST: api/User
         [HttpPost]
+        [AllowAnonymous]
         public async Task<ActionResult> Post([FromBody] UserDTO userDTO)
         {
-            var existeUserMismoNombre = await _dbContext.Users.AnyAsync(x => x.Nombre == userDTO.Nombre);
 
-            if (existeUserMismoNombre)
+            var emailClaim = HttpContext.User.Claims.Where(claim => claim.Type == "email").FirstOrDefault();
+            var email = emailClaim.Value;
+
+            var usuario= await userManager.FindByEmailAsync(email);
+            //var usuarioid = usuario.Id;
+
+            var existeUsuario = await _dbContext.Users.AnyAsync(usersDB => usersDB.Email == usuario.Email);
+            if (!existeUsuario)
             {
-                return BadRequest($"Ya existe un autor con el nombre {userDTO.Nombre}");
+                return BadRequest($"Ya existe un user con el correo {usuario.Email}");
             }
 
             var user = _mapper.Map<User>(userDTO);

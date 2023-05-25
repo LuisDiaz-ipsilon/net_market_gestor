@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Identity;
+using System.ComponentModel.DataAnnotations;
 
 namespace NetMarketGestor.Models
 {
@@ -7,8 +8,9 @@ namespace NetMarketGestor.Models
 
         public int id { get; set; }
 
-        [Required]
+        public int UserId { get; set; }
         public User user { get; set; }
+
         public List<Product> productos { get; set; }
 
 
