@@ -14,7 +14,7 @@ namespace NetMarketGestor.Controllers
 {
     [Route("api/productos")]
     [ApiController]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "EsAdmin")]
     public class ProductController : ControllerBase
     {
         private readonly IMapper _mapper;
@@ -39,6 +39,7 @@ namespace NetMarketGestor.Controllers
 
         // GET: api/Product/5
         [HttpGet("{id:int}", Name = "obtenerproduct")]
+        [AllowAnonymous]
         public async Task<ActionResult> Get(int id)
         {
             var product = await _dbContext.Set<Product>().FindAsync(id);
@@ -50,17 +51,20 @@ namespace NetMarketGestor.Controllers
         }
 
         //Get by name Product
-        [HttpGet("{nombre}")]
-        public async Task<ActionResult<List<GetProductDTO>>> Get([FromRoute] string nombre)
+        [HttpGet("{term}")]
+        [AllowAnonymous]
+        public async Task<ActionResult<List<GetProductDTO>>> Get([FromRoute] string term)
         {
-            var products = await _dbContext.Products.Where(productsDB => productsDB.Nombre.Contains(nombre)).ToListAsync();
-            
+            var products = await _dbContext.Products
+                .Where(product => product.Nombre.Contains(term) || product.Categoria.Contains(term))
+                .ToListAsync();
+
             return _mapper.Map<List<GetProductDTO>>(products);
         }
 
+
         // POST: api/Product
         [HttpPost]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "EsAdmin")]
         public async Task<ActionResult> Post([FromBody] ProductDTO productDTO)
         {
 
