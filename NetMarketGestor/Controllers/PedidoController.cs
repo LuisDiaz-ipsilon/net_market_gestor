@@ -58,7 +58,45 @@ namespace NetMarketGestor.Controllers
                 return BadRequest("Ya existe este carrito");
             }
 
+            int userId = pedidoDTO.User.Id;
+
+            // Buscar el carrito del usuario y obtener los productos
+            var carrito = await _dbContext.Carritos
+                .FirstOrDefaultAsync(c => c.UserId == userId);
+
+            if (carrito == null || carrito.productos.Count == 0)
+            {
+                return BadRequest("El carrito del usuario está vacío");
+            }
+            
+
+            // Verificar si todos los productos tienen existencia mayor a cero
+            bool existenciaValida = carrito.productos.All(p => p.Existencia == 0);
+
+            if (!existenciaValida)
+            {
+                return BadRequest("Existencia de productos inválida en el carrito");
+            }
+
+            //Agregar los productos del carrito al pedido
+            
+
+            //Restar 1 a cada producto consumido
+            // Restar uno a la existencia de cada producto en el carrito
+            foreach (var producto in carrito.productos)
+            {
+                producto.Existencia -= 1;
+                _dbContext.Entry(producto).State = EntityState.Modified;
+            }
+
+            await _dbContext.SaveChangesAsync();
+
+            
+
             var pedido = _mapper.Map<Pedido>(pedidoDTO);
+
+            //Se agregan los productos del carrito del usuario al pedido
+            pedido.Productos.AddRange(carrito.productos);
 
             _dbContext.Add(pedido);
             await _dbContext.SaveChangesAsync();
