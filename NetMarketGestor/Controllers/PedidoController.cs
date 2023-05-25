@@ -109,5 +109,17 @@ namespace NetMarketGestor.Controllers
 
             return Ok();
         }
+
+        // GET: api/pedidos/user/{userId}
+        [HttpGet("user/{userId}")]
+        public async Task<ActionResult<List<GetPedidoDTO>>> GetByUser(int userId)
+        {
+            var pedidos = await _dbContext.Pedidos
+                .Where(pedido => pedido.User.Id == userId)
+                .ToListAsync();
+
+            return _mapper.Map<List<GetPedidoDTO>>(pedidos);
+        }
+
     }
 }
