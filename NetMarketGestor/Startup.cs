@@ -115,8 +115,10 @@ namespace NetMarketGestor
             if (env.IsDevelopment())
             {
                 app.UseSwagger();
-                app.UseSwaggerUI();
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("../swagger/v1/swagger.json", "NetMarketGestor.API v1"));
             }
+
+
             app.UseHttpsRedirection();
 
             app.UseRouting();

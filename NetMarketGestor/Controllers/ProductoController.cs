@@ -37,7 +37,7 @@ namespace NetMarketGestor.Controllers
         }
 
         // GET: api/Product/5
-        [HttpGet("{id}:int", Name = "obtenerproduct")]
+        [HttpGet("{id:int}", Name = "obtenerproduct")]
         public async Task<ActionResult> Get(int id)
         {
             var product = await _dbContext.Set<Product>().FindAsync(id);
