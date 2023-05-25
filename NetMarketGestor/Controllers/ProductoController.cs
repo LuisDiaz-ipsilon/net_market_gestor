@@ -14,7 +14,7 @@ namespace NetMarketGestor.Controllers
 {
     [Route("api/productos")]
     [ApiController]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "EsAdmin")]
     public class ProductController : ControllerBase
     {
         private readonly IMapper _mapper;

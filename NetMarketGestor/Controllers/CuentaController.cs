@@ -125,5 +125,18 @@ namespace NetMarketGestor.Controllers
 
             return NoContent();
         }
+
+        // POST: cuentas/logout
+        [HttpPost("logout")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<ActionResult> Logout()
+        {
+            await signInManager.SignOutAsync();
+
+            return NoContent();
+        }
+
+
+
     }
 }

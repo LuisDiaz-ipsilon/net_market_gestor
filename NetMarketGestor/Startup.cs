@@ -93,8 +93,8 @@ namespace NetMarketGestor
 
             services.AddAuthorization(opciones =>
             {
-                opciones.AddPolicy("Admin", politica => politica.RequireClaim("usAdmin"));
-                opciones.AddPolicy("User", politica => politica.RequireClaim("usUser"));
+                opciones.AddPolicy("EsAdmin", politica => politica.RequireClaim("esAdmin"));
+                opciones.AddPolicy("EsUser", politica => politica.RequireClaim("esUser"));
             });
 
             services.AddCors(opciones =>
