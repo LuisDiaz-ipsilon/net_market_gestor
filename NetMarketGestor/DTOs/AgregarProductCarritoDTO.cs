@@ -2,6 +2,6 @@
 {
     public class AgregarProductCarritoDTO
     {
-        public string Nombre { get; set; }
+        public int Id { get; set; }
     }
 }

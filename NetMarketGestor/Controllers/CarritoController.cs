@@ -116,13 +116,20 @@ namespace NetMarketGestor.Controllers
             {
                 return NotFound("Carrito no encontrado");
             }
+            var prdoductObj = await dbContext.Products.FirstOrDefaultAsync(x => x.Id == agregarProductCarritoDTO.Id);
+            if (prdoductObj != null)
+            {
+                carrito.productos.Add(prdoductObj);
+                dbContext.Update(carrito);
+                await dbContext.SaveChangesAsync();
+                return Ok("Producto agregado al carrito");
+            }
+            else
+            {
+                return BadRequest("No se encuentra el producto que desea agregar");
+            }
 
-            var producto = await dbContext.Set<Product>().FindAsync(agregarProductCarritoDTO.Nombre);
 
-            carrito.productos.Add(producto);
-            await dbContext.SaveChangesAsync();
-
-            return Ok("Producto agregado al carrito");
         }
 
     }

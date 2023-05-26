@@ -75,16 +75,17 @@ namespace NetMarketGestor.Controllers
         {
 
             var emailClaim = HttpContext.User.Claims.Where(claim => claim.Type == "email").FirstOrDefault();
-            var email = emailClaim.Value;
+            //var email = emailClaim.Value;
+            var email = userDTO.Email;
 
-            var usuario= await userManager.FindByEmailAsync(email);
             //var usuarioid = usuario.Id;
 
-            var existeUsuario = await _dbContext.Users.AnyAsync(usersDB => usersDB.Email == usuario.Email);
-            if (!existeUsuario)
+            var existeUsuario = await _dbContext.Users.AnyAsync(usersDB => usersDB.Email == email);
+            if (existeUsuario)
             {
-                return BadRequest($"Ya existe un user con el correo {usuario.Email}");
+                return BadRequest($"Ya existe un user con el correo {email}");
             }
+            var usuario= await userManager.FindByEmailAsync(email);
 
             var user = _mapper.Map<User>(userDTO);
 
