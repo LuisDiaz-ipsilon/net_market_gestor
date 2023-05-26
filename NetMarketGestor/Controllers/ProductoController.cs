@@ -14,7 +14,7 @@ namespace NetMarketGestor.Controllers
 {
     [Route("api/productos")]
     [ApiController]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "EsAdmin")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class ProductController : ControllerBase
     {
         private readonly IMapper _mapper;
@@ -30,7 +30,7 @@ namespace NetMarketGestor.Controllers
 
         // GET: api/Product
         [HttpGet]
-        [AllowAnonymous]
+        //[AllowAnonymous]
         public async Task<ActionResult<List<GetProductDTO>>> Get()
         {
             var products = await _dbContext.Products.ToListAsync();
@@ -39,7 +39,7 @@ namespace NetMarketGestor.Controllers
 
         // GET: api/Product/5
         [HttpGet("{id:int}", Name = "obtenerproduct")]
-        [AllowAnonymous]
+        //[AllowAnonymous]
         public async Task<ActionResult> Get(int id)
         {
             var product = await _dbContext.Set<Product>().FindAsync(id);
@@ -52,7 +52,7 @@ namespace NetMarketGestor.Controllers
 
         //Get by name Product
         [HttpGet("{term}")]
-        [AllowAnonymous]
+        //[AllowAnonymous]
         public async Task<ActionResult<List<GetProductDTO>>> Get([FromRoute] string term)
         {
             var products = await _dbContext.Products
@@ -65,6 +65,7 @@ namespace NetMarketGestor.Controllers
 
         // POST: api/Product
         [HttpPost]
+        [Authorize(Policy = "EsAdmin")]
         public async Task<ActionResult> Post([FromBody] ProductDTO productDTO)
         {
 
@@ -87,6 +88,7 @@ namespace NetMarketGestor.Controllers
 
         // PUT: api/Product/5
         [HttpPut("{id:int}")]
+        [Authorize(Policy = "EsAdmin")]
         public async Task<ActionResult> Put(ProductCreacionDTO productCreacionDTO, int id)
         {
 
@@ -107,6 +109,7 @@ namespace NetMarketGestor.Controllers
 
         // PATCH: api/Product/5
         [HttpPatch("{id:int}")]
+        [Authorize(Policy = "EsAdmin")]
         public async Task<ActionResult> Patch(int id, [FromBody] JsonPatchDocument<ProductDTO> patchDocument)
         {
             var product = await _dbContext.Products.FindAsync(id);
@@ -134,6 +137,7 @@ namespace NetMarketGestor.Controllers
 
         // DELETE: api/Product/5
         [HttpDelete("{id:int}")]
+        [Authorize(Policy = "EsAdmin")]
         public async Task<ActionResult> Delete(int id)
         {
             var product = await _dbContext.Products.AnyAsync(x => x.Id == id);
