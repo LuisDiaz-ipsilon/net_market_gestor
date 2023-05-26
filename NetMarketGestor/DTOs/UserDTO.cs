@@ -13,10 +13,6 @@ namespace NetMarketGestor.DTOs
 
         public string Email { get; set; }   
 
-        [Required(ErrorMessage = "El campo Carrito es requerido.")]
-        public CarritoDTO Carrito { get; set; }
-
-        public List<Pedido> Pedidos { get; set; }
 
         [Direccion]
         public string Direccion { get; set; }

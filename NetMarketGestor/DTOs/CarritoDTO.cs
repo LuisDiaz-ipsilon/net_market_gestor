@@ -4,8 +4,10 @@
     {
         public int Id { get; set; }
 
-        public UserDTO User { get; set; }
+        public int UserId { get; set; }
 
-        public List<ProductDTO> Productos { get; set; }
+        
+
+        
     }
 }

@@ -1,11 +1,37 @@
 {
   "Version": 1,
-  "Hash": "o04t7etDMGh0LHJhx5ru1Hs0sMdx9PHHGmA/gl7Vr9w=",
+  "Hash": "fPCT3ndzCbs+pwRAUR7QljnTZ2NbsgmyT7U/V011bmg=",
   "Source": "NetMarketGestor",
   "BasePath": "_content/NetMarketGestor",
   "Mode": "Default",
   "ManifestType": "Build",
   "ReferencedProjectsConfiguration": [],
-  "DiscoveryPatterns": [],
-  "Assets": []
+  "DiscoveryPatterns": [
+    {
+      "Name": "NetMarketGestor\\wwwroot",
+      "Source": "NetMarketGestor",
+      "ContentRoot": "C:\\Users\\Win\\Documents\\FCFM\\05 BackEnd\\net_market_gestor\\NetMarketGestor\\wwwroot\\",
+      "BasePath": "_content/NetMarketGestor",
+      "Pattern": "**"
+    }
+  ],
+  "Assets": [
+    {
+      "Identity": "C:\\Users\\Win\\Documents\\FCFM\\05 BackEnd\\net_market_gestor\\NetMarketGestor\\wwwroot\\index.html",
+      "SourceId": "NetMarketGestor",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Win\\Documents\\FCFM\\05 BackEnd\\net_market_gestor\\NetMarketGestor\\wwwroot\\",
+      "BasePath": "_content/NetMarketGestor",
+      "RelativePath": "index.html",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\index.html"
+    }
+  ]
 }

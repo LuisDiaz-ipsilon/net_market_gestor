@@ -18,8 +18,9 @@ namespace NetMarketGestor.DTOs
 
         public string Estatus { get; set; }
 
-        public List<ProductDTO> Productos { get; set; }
+        public int carritoId { get; set; }
 
-        public UserDTO User { get; set; }
+        public int userId { get; set; }
+
     }
 }

@@ -58,7 +58,7 @@ namespace NetMarketGestor.Controllers
                 return BadRequest("Ya existe este carrito");
             }
 
-            int userId = pedidoDTO.User.Id;
+            int userId = pedidoDTO.userId;
 
             // Buscar el carrito del usuario y obtener los productos
             var carrito = await _dbContext.Carritos
@@ -97,6 +97,10 @@ namespace NetMarketGestor.Controllers
 
             //Se agregan los productos del carrito del usuario al pedido
             pedido.Productos.AddRange(carrito.productos);
+
+            carrito = await _dbContext.Set<Carrito>().FindAsync(pedidoDTO.carritoId);
+            pedido.Productos.AddRange(carrito.productos);
+            pedido.User = await _dbContext.Set<User>().FindAsync(userId);
 
             _dbContext.Add(pedido);
             await _dbContext.SaveChangesAsync();

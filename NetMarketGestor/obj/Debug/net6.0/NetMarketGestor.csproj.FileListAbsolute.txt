@@ -66,3 +66,4 @@ C:\Users\Win\Documents\FCFM\05 BackEnd\net_market_gestor\NetMarketGestor\bin\Deb
 C:\Users\Win\Documents\FCFM\05 BackEnd\net_market_gestor\NetMarketGestor\bin\Debug\net6.0\Microsoft.AspNetCore.Mvc.NewtonsoftJson.dll
 C:\Users\Win\Documents\FCFM\05 BackEnd\net_market_gestor\NetMarketGestor\bin\Debug\net6.0\Newtonsoft.Json.dll
 C:\Users\Win\Documents\FCFM\05 BackEnd\net_market_gestor\NetMarketGestor\bin\Debug\net6.0\Newtonsoft.Json.Bson.dll
+C:\Users\Win\Documents\FCFM\05 BackEnd\net_market_gestor\NetMarketGestor\bin\Debug\net6.0\NetMarketGestor.staticwebassets.runtime.json

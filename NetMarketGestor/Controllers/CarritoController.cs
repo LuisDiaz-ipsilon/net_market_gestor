@@ -52,13 +52,14 @@ namespace NetMarketGestor.Controllers
         public async Task<ActionResult> Post([FromBody] CarritoDTO carritoDTO)
         {
 
-            var existeCarritoMismoUser = await dbContext.Carritos.AnyAsync(x => x.user.Id == carritoDTO.User.Id);
+            var existeCarritoMismoUser = await dbContext.Carritos.AnyAsync(x => x.user.Id == carritoDTO.UserId);
             if (existeCarritoMismoUser)
             {
                 return BadRequest("Ya exite un carrito para el mismo usuario");
             }
 
             var carrito = mapper.Map<Carrito>(carritoDTO);
+            carrito.user = await dbContext.Set<User>().FindAsync(carrito.UserId);
 
             dbContext.Add(carrito);
             await dbContext.SaveChangesAsync();
@@ -108,7 +109,7 @@ namespace NetMarketGestor.Controllers
 
         // POST: api/Carritos/{id}/agregarProducto
         [HttpPost("{id}/agregarProducto")]
-        public async Task<ActionResult> AgregarProducto(int id, [FromBody] ProductDTO productoDTO)
+        public async Task<ActionResult> AgregarProducto(int id, [FromBody] AgregarProductCarritoDTO agregarProductCarritoDTO)
         {
             var carrito = await dbContext.Carritos.Include(c => c.productos).FirstOrDefaultAsync(c => c.id == id);
             if (carrito == null)
@@ -116,7 +117,7 @@ namespace NetMarketGestor.Controllers
                 return NotFound("Carrito no encontrado");
             }
 
-            var producto = mapper.Map<Product>(productoDTO);
+            var producto = await dbContext.Set<Product>().FindAsync(agregarProductCarritoDTO.Nombre);
 
             carrito.productos.Add(producto);
             await dbContext.SaveChangesAsync();
