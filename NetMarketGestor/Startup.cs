@@ -95,8 +95,8 @@ namespace NetMarketGestor
 
             services.AddAuthorization(opciones =>
             {
-                opciones.AddPolicy("EsAdmin", politica => politica.RequireClaim("esAdmin"));
-                opciones.AddPolicy("EsUser", politica => politica.RequireClaim("esUser"));
+                opciones.AddPolicy("EsAdmin", politica => politica.RequireClaim("EsAdmin"));
+                opciones.AddPolicy("EsUser", politica => politica.RequireClaim("EsUser"));
             });
 
             services.AddCors(opciones =>
@@ -124,6 +124,8 @@ namespace NetMarketGestor
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("../swagger/v1/swagger.json", "NetMarketGestor.API v1"));
             }
 
+            app.UseDefaultFiles();
+            app.UseStaticFiles();
 
             app.UseHttpsRedirection();
 
