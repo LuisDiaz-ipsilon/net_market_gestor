@@ -132,5 +132,40 @@ namespace NetMarketGestor.Controllers
 
             return Ok();
         }
+
+        [HttpGet("recomendaciones/{userId}")]
+        public async Task<ActionResult<List<Product>>> GetRecomendaciones(int userId)
+        {
+            var user = await _dbContext.Users
+                .Include(u => u.Pedidos)
+                .ThenInclude(p => p.Productos)
+                .FirstOrDefaultAsync(u => u.Id == userId);
+
+            if (user == null)
+            {
+                return NotFound("Usuario no encontrado");
+            }
+
+            var pedidos = user.Pedidos;
+
+            // Obtener las tres categorías más comunes de los productos de los pedidos
+            var categoriasRelevantes = pedidos
+                .SelectMany(p => p.Productos)
+                .GroupBy(p => p.Categoria)
+                .OrderByDescending(g => g.Count())
+                .Take(3)
+                .Select(g => g.Key)
+                .ToList();
+
+            // Obtener los productos recomendados de las categorías relevantes
+            var recomendaciones = await _dbContext.Products
+                .Where(p => categoriasRelevantes.Contains(p.Categoria))
+                .ToListAsync();
+
+            return recomendaciones;
+        }
+
+
+
     }
 }
