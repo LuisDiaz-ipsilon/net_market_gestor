@@ -105,5 +105,24 @@ namespace NetMarketGestor.Controllers
 
             return Ok();
         }
+
+        // POST: api/Carritos/{id}/agregarProducto
+        [HttpPost("{id}/agregarProducto")]
+        public async Task<ActionResult> AgregarProducto(int id, [FromBody] ProductDTO productoDTO)
+        {
+            var carrito = await dbContext.Carritos.Include(c => c.productos).FirstOrDefaultAsync(c => c.id == id);
+            if (carrito == null)
+            {
+                return NotFound("Carrito no encontrado");
+            }
+
+            var producto = mapper.Map<Product>(productoDTO);
+
+            carrito.productos.Add(producto);
+            await dbContext.SaveChangesAsync();
+
+            return Ok("Producto agregado al carrito");
+        }
+
     }
 }
