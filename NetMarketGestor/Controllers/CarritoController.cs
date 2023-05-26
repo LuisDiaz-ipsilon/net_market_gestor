@@ -40,10 +40,21 @@ namespace NetMarketGestor.Controllers
         public async Task<ActionResult> Get(int id)
         {
             var carrito = await dbContext.Set<Carrito>().FindAsync(id);
+
             if (carrito == null)
             {
                 return NotFound();
             }
+
+            var carritoProducts = await dbContext.CarritoProductos.ToListAsync();
+            var carritoProductsResponse = new List<Product>();
+            foreach (var productoCId in carritoProducts) {
+                if (productoCId.CarritoId == id) {
+                    var product = await dbContext.Set<Product>().FindAsync(productoCId.ProductId);
+                    carritoProductsResponse.Add(product);
+                }
+            }
+            carrito.productos = carritoProductsResponse;
             return Ok(carrito);
         }
 
@@ -111,6 +122,7 @@ namespace NetMarketGestor.Controllers
         [HttpPost("{id}/agregarProducto")]
         public async Task<ActionResult> AgregarProducto(int id, [FromBody] AgregarProductCarritoDTO agregarProductCarritoDTO)
         {
+            CarritoProducto carritoProducto = new CarritoProducto();
             var carrito = await dbContext.Carritos.Include(c => c.productos).FirstOrDefaultAsync(c => c.id == id);
             if (carrito == null)
             {
@@ -120,7 +132,10 @@ namespace NetMarketGestor.Controllers
             if (prdoductObj != null)
             {
                 carrito.productos.Add(prdoductObj);
+                carritoProducto.CarritoId = id;
+                carritoProducto.ProductId = agregarProductCarritoDTO.Id;
                 dbContext.Update(carrito);
+                dbContext.Add(carritoProducto);
                 await dbContext.SaveChangesAsync();
                 return Ok("Producto agregado al carrito");
             }
@@ -130,6 +145,23 @@ namespace NetMarketGestor.Controllers
             }
 
 
+        }
+
+        [HttpDelete("{id}/eliminarProducto")]
+        public async Task<IActionResult> EliminarProductoDeCarrito(int id, [FromBody] DTOProductoEnCarrito dtoProductoEnCarrito)
+        {
+            List<CarritoProducto> carritoProductos = await dbContext.CarritoProductos.ToListAsync<CarritoProducto>();
+            foreach (var carritoProducto in carritoProductos) 
+            {
+                if (carritoProducto.CarritoId == id && dtoProductoEnCarrito.Id == carritoProducto.ProductId)
+                {
+                    dbContext.Remove(carritoProducto);
+                    await dbContext.SaveChangesAsync();
+                    break;
+                }
+            }
+
+            return Ok();
         }
 
     }

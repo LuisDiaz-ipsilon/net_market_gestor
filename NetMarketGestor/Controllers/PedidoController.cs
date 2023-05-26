@@ -62,7 +62,22 @@ namespace NetMarketGestor.Controllers
 
             // Buscar el carrito del usuario y obtener los productos
             var carrito = await _dbContext.Carritos
-                .FirstOrDefaultAsync(c => c.UserId == userId);
+                .FirstOrDefaultAsync(c => c.id == pedidoDTO.carritoId);
+
+            if (carrito != null)
+            {
+                var carritoProducts = await _dbContext.CarritoProductos.ToListAsync();
+                var carritoProductsResponse = new List<Product>();
+                foreach (var productoCId in carritoProducts)
+                {
+                    if (productoCId.CarritoId == carrito.id)
+                    {
+                        var product = await _dbContext.Set<Product>().FindAsync(productoCId.ProductId);
+                        carritoProductsResponse.Add(product);
+                    }
+                }
+                carrito.productos = carritoProductsResponse;
+            }
 
             if (carrito == null || carrito.productos.Count == 0)
             {
@@ -73,7 +88,7 @@ namespace NetMarketGestor.Controllers
             // Verificar si todos los productos tienen existencia mayor a cero
             bool existenciaValida = carrito.productos.All(p => p.Existencia == 0);
 
-            if (!existenciaValida)
+            if (existenciaValida)
             {
                 return BadRequest("Existencia de productos inválida en el carrito");
             }
@@ -94,13 +109,19 @@ namespace NetMarketGestor.Controllers
             
 
             var pedido = _mapper.Map<Pedido>(pedidoDTO);
+            pedido.Productos = new List<Product>();
 
             //Se agregan los productos del carrito del usuario al pedido
-            pedido.Productos.AddRange(carrito.productos);
+            foreach (var producto in carrito.productos)
+            {
+                pedido.Productos.Add(producto);
+            }
 
+            //???
+            /*
             carrito = await _dbContext.Set<Carrito>().FindAsync(pedidoDTO.carritoId);
             pedido.Productos.AddRange(carrito.productos);
-            pedido.User = await _dbContext.Set<User>().FindAsync(userId);
+            pedido.User = await _dbContext.Set<User>().FindAsync(userId);*/
 
             _dbContext.Add(pedido);
             await _dbContext.SaveChangesAsync();
