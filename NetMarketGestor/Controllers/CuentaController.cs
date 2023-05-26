@@ -9,6 +9,7 @@ using System.Security.Claims;
 using System.Text;
 using NetMarketGestor.DTOs;
 using Microsoft.AspNetCore.Cors;
+using NetMarketGestor.Utilidades;
 
 namespace NetMarketGestor.Controllers
 {
@@ -26,6 +27,7 @@ namespace NetMarketGestor.Controllers
             this.userManager = userManager;
             this.configuration = configuration;
             this.signInManager = signInManager;
+            
         }
 
         [HttpPost("registrar")]
@@ -36,8 +38,12 @@ namespace NetMarketGestor.Controllers
 
             if (result.Succeeded)
             {
+
+                Correos correo = new Correos();
+                correo.EnviarCorreo(credenciales.Email, "MarketGestor Bienvenue", "Registro exitoso bisonte");
                 //Se retorna el Jwt (Json Web Token) especifica el formato del token que hay que devolverle a los clientes
                 return await ConstruirToken(credenciales);
+
             }
             else
             {

@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NetMarketGestor.DTOs;
 using NetMarketGestor.Models;
-
+using NetMarketGestor.Utilidades;
 using System.ComponentModel.DataAnnotations;
 
 
@@ -103,6 +103,7 @@ namespace NetMarketGestor.Controllers
 
             var pedidoDto = _mapper.Map<GetPedidoDTO>(pedido);
 
+            
             return CreatedAtRoute("obtenerpedido", new {id = pedido.id}, pedidoDto);
         }
 
@@ -122,6 +123,14 @@ namespace NetMarketGestor.Controllers
 
             _dbContext.Update(pedido);
             await _dbContext.SaveChangesAsync();
+
+            //Enviar correo...
+            var destinatario = pedido.User.Email;
+
+            //Enviar correo para actualizacion
+            Correos correo = new Correos();
+            correo.EnviarCorreo(pedidoDTO.User.Email, "Nuevo Pedido MarketGestor", "El estatus de tu pedido cambio a" + pedidoDTO.Estatus);
+
 
             return NoContent();
         }
