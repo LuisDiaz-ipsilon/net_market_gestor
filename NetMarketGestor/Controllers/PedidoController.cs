@@ -129,7 +129,7 @@ namespace NetMarketGestor.Controllers
 
             //Enviar correo para actualizacion
             Correos correo = new Correos();
-            correo.EnviarCorreo(pedidoCreacionDTO.User.Email, "Nuevo Pedido MarketGestor", "El estatus de tu pedido cambio a" + pedidoDTO.Estatus);
+            correo.EnviarCorreo(pedidoCreacionDTO.User.Email, "Nuevo Pedido MarketGestor", "El estatus de tu pedido cambio a" + pedidoCreacionDTO.Estatus);
 
 
             return NoContent();
