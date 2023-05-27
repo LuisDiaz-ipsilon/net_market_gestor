@@ -1,4 +1,6 @@
-﻿function doRequest(method, resource, headers, body) {
+﻿var orders;
+
+function doRequest(method, resource, headers, body = null) {
     return new Promise((resolve, reject) => {
         let xhr = new XMLHttpRequest();
         xhr.onreadystatechange = function () {
@@ -22,7 +24,12 @@
                 xhr.setRequestHeader(prop, headers[prop]);
             }
         }
-        xhr.send(body);
+        if (body)
+        {
+            xhr.send(body);
+        } else {
+            xhr.send();
+        }
     }).then((res) => { return res; }, () => { return false; });
 }
 
@@ -32,10 +39,40 @@ async function apiLogin() {
     return tokenReq;
 }
 
+async function sendChangeStatusRequest(orderId) {
+    let userCredentials = await apiLogin();
+    for (var order of orders) {
+        if (order.id == orderId) {
+            if (order.estatus == 'en proceso') {
+                order.estatus = 'en envio';
+            } else if (order.estatus == 'en envio') {
+                order.estatus = 'recibido';
+            }
+            delete order.id;
+            delete order.user;
+            delete order.userId;
+            await doRequest('PUT', `/api/pedido/${orderId}`, { 'Content-Type': 'application/json', 'Authorization': `Bearer ${userCredentials.token}` }, JSON.stringify(order));
+            loadOrders();
+            return;
+        }
+    }
+}
+
+function changeStatus(elm)
+{
+    console.log(elm);
+    let oC = elm;
+    while (!oC.classList.contains('order-conainer'))
+    {
+        oC = oC.parentElement;
+    }
+    sendChangeStatusRequest(oC.children[0].querySelector('span').innerText);
+}
+
 function buildOrderView(order, ordersContainer) {
     let orderConainer = document.createElement('div');
     orderConainer.className = 'order-conainer';
-    orderConainer.innerHTML = `<div class="order-id">${orde.Id}</div><div class="order-address">${order.DireccionEntrega}</div><div class="order-status">${order.Estatus}</div><div class="order-user-email">${order.User.Email}</div>`;
+    orderConainer.innerHTML = `<div class="order-id"><label>Pedido: </label><span>${order.id}</span></div><div class="order-address"><label>Domicilio:</label><span>${order.direccionEntrega}</span></div><div class="order-status"><label>Estatus:</label><div class="change-status-btn" onclick="changeStatus(this)"><span>${order.estatus}</span></div></div>`;
     ordersContainer.append(orderConainer);
 }
 
@@ -49,15 +86,15 @@ function buildOrdersView(orders) {
 
 async function loadOrders() {
     let userCredentials = await apiLogin();
-    let orders = await doRequest('GET', 'api/pedidos', { 'Content-Type': 'application/json', 'Authorization': `Bearer ${userCredentials.token}` });
-    console.log(orders);
+    orders = await doRequest('GET', '/api/pedidos', { 'Content-Type': 'application/json', 'Authorization': `Bearer ${userCredentials.token}` });
     buildOrdersView(orders);
 }
 
 function documentReady() {
     if (document.readyState == 'complete') {
         console.log("Document is ready");
-        setInterval(loadOrders, 10000);
+        //setInterval(loadOrders, 10000);
+        loadOrders();
     }
 }
 

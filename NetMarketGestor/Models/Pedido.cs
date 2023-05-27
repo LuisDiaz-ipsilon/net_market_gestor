@@ -22,6 +22,7 @@ namespace NetMarketGestor.Models
 
         public List<Product> Productos { get; set; }
 
+        public int UserId { get; set; }
         public User User { get; set; }
 
 

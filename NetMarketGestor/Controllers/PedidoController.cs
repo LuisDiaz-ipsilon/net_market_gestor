@@ -32,6 +32,32 @@ namespace NetMarketGestor.Controllers
         public async Task<ActionResult<List<GetPedidoDTO>>> Get()
         {
             var pedidos = await _dbContext.Pedidos.ToListAsync();
+            var carritos = await _dbContext.Carritos.ToListAsync();
+            foreach (var pedido in pedidos)
+            {
+                Carrito userCarrito = new Carrito();
+                foreach (var carrito in carritos)
+                {
+                    if (carrito.UserId == pedido.UserId) {
+                        userCarrito = carrito;
+                        break;
+                    }
+                }
+                var productosinCarrito = await _dbContext.CarritoProductos.ToListAsync();
+                List<Product> productos = new List<Product>();
+                if (userCarrito.id != 0)
+                {
+                    foreach (var producto in productosinCarrito)
+                    {
+                        if (producto.CarritoId == userCarrito.id)
+                        {
+                            var productInCarrito = await _dbContext.Products.FirstOrDefaultAsync(x => x.Id == producto.ProductId);
+                            productos.Add(productInCarrito);
+                        }
+                    }
+                }
+                pedido.Productos = productos;
+            }
             return Ok(pedidos);
         }
 
@@ -83,7 +109,7 @@ namespace NetMarketGestor.Controllers
             {
                 return BadRequest("El carrito del usuario está vacío");
             }
-            
+
 
             // Verificar si todos los productos tienen existencia mayor a cero
             bool existenciaValida = carrito.productos.All(p => p.Existencia == 0);
@@ -94,7 +120,7 @@ namespace NetMarketGestor.Controllers
             }
 
             //Agregar los productos del carrito al pedido
-            
+
 
             //Restar 1 a cada producto consumido
             // Restar uno a la existencia de cada producto en el carrito
@@ -106,7 +132,7 @@ namespace NetMarketGestor.Controllers
 
             await _dbContext.SaveChangesAsync();
 
-            
+
 
             var pedido = _mapper.Map<Pedido>(pedidoDTO);
             pedido.Productos = new List<Product>();
@@ -118,25 +144,33 @@ namespace NetMarketGestor.Controllers
             }
 
             //???
-            /*
-            carrito = await _dbContext.Set<Carrito>().FindAsync(pedidoDTO.carritoId);
-            pedido.Productos.AddRange(carrito.productos);
-            pedido.User = await _dbContext.Set<User>().FindAsync(userId);*/
 
-            _dbContext.Add(pedido);
-            await _dbContext.SaveChangesAsync();
+            //carrito = await _dbContext.Set<Carrito>().FindAsync(pedidoDTO.carritoId);
+            //pedido.Productos.AddRange(carrito.productos);
+            pedido.User = await _dbContext.Users.FirstOrDefaultAsync(x => x.Id == userId);
+            if (pedido.User != null)
+            { 
+                _dbContext.Add(pedido);
+                await _dbContext.SaveChangesAsync();
 
-            var pedidoDto = _mapper.Map<GetPedidoDTO>(pedido);
+                var pedidoDto = _mapper.Map<GetPedidoDTO>(pedido);
 
             
-            return CreatedAtRoute("obtenerpedido", new {id = pedido.id}, pedidoDto);
+                return CreatedAtRoute("obtenerpedido", new {id = pedido.id}, pedidoDto);
+            }
+            else
+            {
+                return NotFound("El usuario no existe");
+            }
+
         }
 
         // PUT: api/Pedido/5
         [HttpPut("{id:int}")]
-        public async Task<ActionResult> Put(PedidoCreacionDTO pedidoCreacionDTO, int id)
+        public async Task<ActionResult> Put(PUTPedidoDTO pedidoCreacionDTO, int id)
         {
             var exist = await _dbContext.Pedidos.AnyAsync(x => x.id == id);
+            var pedidos = await _dbContext.Pedidos.ToListAsync();
             
             if (!exist)
             {
@@ -154,7 +188,19 @@ namespace NetMarketGestor.Controllers
 
             //Enviar correo para actualizacion
             Correos correo = new Correos();
-            correo.EnviarCorreo(pedidoCreacionDTO.User.Email, "Nuevo Pedido MarketGestor", "El estatus de tu pedido cambio a" + pedidoCreacionDTO.Estatus);
+            Models.User usuario = new Models.User();
+            foreach (var pedidoDto in pedidos)
+            {
+                if (pedidoDto.id == id)
+                {
+                    usuario = pedidoDto.User;
+                    break;
+                }
+            }
+
+            if (usuario.Email != "") { 
+                correo.EnviarCorreo(usuario.Email, "Nuevo Pedido MarketGestor", "El estatus de tu pedido cambio a" + pedidoCreacionDTO.Estatus);
+            }
 
 
             return NoContent();

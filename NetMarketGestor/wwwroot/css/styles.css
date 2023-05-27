@@ -1,4 +1,41 @@
 ﻿* {
     margin: 0px;
     padding: 0px;
+    font-family: Arial;
+}
+
+body {
+    background-color: #87bd81;
+    padding: 12px;
+}
+
+.order-conainer {
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 4px;
+    margin: 16px 6px;
+    padding: 6px;
+    font-size: 23px;
+}
+
+div#orders {
+    width: 30%;
+    padding: 12px;
+    background-color: #f9da68;
+    border-radius: 9px;
+}
+
+
+.order-status {
+    display: flex;
+}
+
+.change-status-btn {
+    margin: 0px 8px;
+    background-color: #5beb6d;
+    border-radius: 9px;
+    padding: 0px 10px;
+    border-style: solid;
+    border-width: 1px;
+    cursor: pointer;
 }
